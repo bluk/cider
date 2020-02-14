@@ -6,6 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+pub mod device_check;
+pub mod jwt;
+
+/// The 10 character team ID.
+///
+/// It is used as the issuer value in the claims payload of a JWT.
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+pub struct TeamId<'a>(pub &'a str);
+
 #[cfg(test)]
 mod tests {
     #[test]
