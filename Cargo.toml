@@ -1,0 +1,18 @@
+[package]
+name = "cider"
+version = "0.1.0"
+license = "MIT OR Apache-2.0"
+authors = ["Bryant Luk <code@bryantluk.com>"]
+edition = "2018"
+description = "A helper library for Apple services"
+repository = "https://github.com/bluk/cider"
+readme = "README.md"
+include = [
+  "src/**/*.rs",
+  "Cargo.toml",
+  "README.md",
+  "LICENSE-APACHE",
+  "LICENSE-MIT",
+]
+
+[dependencies]
