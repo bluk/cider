@@ -12,8 +12,8 @@
 //!
 //! [apple_docs]: https://developer.apple.com/documentation/devicecheck
 
+use crate::time::DurationSinceEpoch;
 use serde::{Deserialize, Serialize};
-use std::time::Duration;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Env {
@@ -42,13 +42,16 @@ pub struct ValidationReq {
 }
 
 impl ValidationReq {
-    pub fn new(device_token: &str, transaction_id: &str, duration_since_epoch: Duration) -> Self {
-        let timestamp =
-            duration_since_epoch.as_secs() * 1000 + u64::from(duration_since_epoch.subsec_millis());
+    pub fn new<T>(device_token: &str, transaction_id: &str, duration_since_epoch: T) -> Self
+    where
+        T: DurationSinceEpoch,
+    {
+        // let timestamp =
+        //     duration_since_epoch.as_secs() * 1000 + u64::from(duration_since_epoch.subsec_millis());
         ValidationReq {
             device_token: String::from(device_token),
             transaction_id: String::from(transaction_id),
-            timestamp,
+            timestamp: duration_since_epoch.as_millis(),
         }
     }
 }

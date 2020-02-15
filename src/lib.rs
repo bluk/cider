@@ -8,6 +8,7 @@
 
 pub mod device_check;
 pub mod jwt;
+pub mod time;
 
 /// The 10 character team ID.
 ///

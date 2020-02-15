@@ -13,9 +13,8 @@
 //! [apple_docs]:
 //! https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1
 
-use crate::TeamId;
+use crate::{time::DurationSinceEpoch, TeamId};
 use serde::Serialize;
-use std::time::Duration;
 
 /// Algorithm used to sign the JWT.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -99,7 +98,10 @@ pub struct Claims<'a> {
 }
 
 impl<'a> Claims<'a> {
-    pub fn new(team_id: &'a TeamId, duration_since_epoch: Duration) -> Self {
+    pub fn new<T>(team_id: &'a TeamId, duration_since_epoch: T) -> Self
+    where
+        T: DurationSinceEpoch,
+    {
         Claims {
             iss: team_id.0,
             iat: duration_since_epoch.as_secs(),
