@@ -41,19 +41,23 @@ impl<'a> From<&'a str> for Algorithm<'a> {
     }
 }
 
+/// The signing key ID.
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+pub struct SigningKeyId<'a>(pub &'a str);
+
 /// Key used to sign a JWT.
 pub struct SigningKey<'a> {
-    id: &'a str,
+    id: &'a SigningKeyId<'a>,
     alg: Algorithm<'a>,
     data: &'a [u8],
 }
 
 impl<'a> SigningKey<'a> {
-    pub fn new(id: &'a str, alg: Algorithm<'a>, data: &'a [u8]) -> Self {
+    pub fn new(id: &'a SigningKeyId<'a>, alg: Algorithm<'a>, data: &'a [u8]) -> Self {
         SigningKey { id, alg, data }
     }
 
-    pub fn id(&self) -> &str {
+    pub fn id(&self) -> &SigningKeyId {
         self.id
     }
 
@@ -77,7 +81,7 @@ impl<'a> Header<'a> {
     pub fn new(key: &'a SigningKey<'a>) -> Self {
         Header {
             alg: key.alg.as_str(),
-            kid: key.id,
+            kid: key.id.0,
         }
     }
 
