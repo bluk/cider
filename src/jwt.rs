@@ -120,13 +120,3 @@ impl<'a> Claims<'a> {
         self.iat
     }
 }
-
-// /// Signs the header and claims for a JWT.
-// pub trait Signer {
-//     /// Returns an encoded and signed JWT.
-//     fn encode_and_sign<'a, 'b>(
-//         &self,
-//         header: &Header<'a>,
-//         claims: &Claims<'b>,
-//     ) -> Result<String, Box<dyn std::error::Error>>;
-// }
