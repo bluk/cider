@@ -6,10 +6,12 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-//! JSON Web Tokens used for auth.
+//! Helpers for JSON Web Tokens.
 //!
-//! See the [usage documentation][apple_docs].
+//! [JSON Web Tokens][rfc_7519] are used for authentication. See the [general usage
+//! documentation][apple_docs].
 //!
+//! [rfc_7519]: https://tools.ietf.org/html/rfc7519
 //! [apple_docs]:
 //! https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW1
 
@@ -18,25 +20,15 @@ use serde::Serialize;
 
 /// Algorithm used to sign the JWT.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-pub enum Algorithm<'a> {
+#[non_exhaustive]
+pub enum Algorithm {
     ES256,
-    Unknown(&'a str),
 }
 
-impl<'a> Algorithm<'a> {
-    pub fn as_str(&self) -> &str {
+impl Algorithm {
+    fn as_str(&self) -> &str {
         match self {
             Algorithm::ES256 => "ES256",
-            Algorithm::Unknown(other) => other,
-        }
-    }
-}
-
-impl<'a> From<&'a str> for Algorithm<'a> {
-    fn from(other: &'a str) -> Self {
-        match other {
-            "ES256" => Algorithm::ES256,
-            _ => Algorithm::Unknown(other),
         }
     }
 }
@@ -48,23 +40,31 @@ pub struct SigningKeyId<'a>(pub &'a str);
 /// Key used to sign a JWT.
 pub struct SigningKey<'a> {
     id: &'a SigningKeyId<'a>,
-    alg: Algorithm<'a>,
+    alg: Algorithm,
     data: &'a [u8],
 }
 
 impl<'a> SigningKey<'a> {
-    pub fn new(id: &'a SigningKeyId<'a>, alg: Algorithm<'a>, data: &'a [u8]) -> Self {
+    /// Constructs a new signing key.
+    ///
+    /// The signing key id is the associated identifier for the key. The algorithm is the intended
+    /// algorithm used to sign data with this key. The data is the raw key bytes (e.g. the contents
+    /// of the *.p8 file).
+    pub fn new(id: &'a SigningKeyId<'a>, alg: Algorithm, data: &'a [u8]) -> Self {
         SigningKey { id, alg, data }
     }
 
+    /// Returns the key ID.
     pub fn id(&self) -> &SigningKeyId {
         self.id
     }
 
-    pub fn alg(&self) -> Algorithm<'a> {
+    /// Returns the intended signing algorithm.
+    pub fn alg(&self) -> Algorithm {
         self.alg
     }
 
+    /// Returns the signing key in raw bytes.
     pub fn data(&self) -> &[u8] {
         self.data
     }
@@ -78,6 +78,7 @@ pub struct Header<'a> {
 }
 
 impl<'a> Header<'a> {
+    /// Constructs a `Header` from a signing key.
     pub fn new(key: &'a SigningKey<'a>) -> Self {
         Header {
             alg: key.alg.as_str(),
@@ -85,16 +86,18 @@ impl<'a> Header<'a> {
         }
     }
 
-    pub fn alg(&self) -> Algorithm {
-        Algorithm::from(self.alg)
+    /// Returns the signing algorithm.
+    pub fn alg(&self) -> &str {
+        self.alg
     }
 
+    /// Returns the key ID.
     pub fn kid(&self) -> &str {
-        &self.kid
+        self.kid
     }
 }
 
-/// Contains the issuer ID (team ID) and when the JWT was issued.
+/// Contains the issuer ID (team ID), when the token was issued, and when the token expires.
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize)]
 pub struct Claims<'a> {
     iss: &'a str,
@@ -104,6 +107,7 @@ pub struct Claims<'a> {
 }
 
 impl<'a> Claims<'a> {
+    /// Constructs a `Claims`.
     pub fn new<T>(team_id: &'a TeamId, duration_since_epoch: T, exp: Option<u64>) -> Self
     where
         T: DurationSinceEpoch,
@@ -115,14 +119,17 @@ impl<'a> Claims<'a> {
         }
     }
 
+    /// Returns the issuer of the token (usually the team ID).
     pub fn iss(&self) -> &str {
         &self.iss
     }
 
+    /// Returns when the token was issued as the number of seconds since the Unix epoch.
     pub fn iat(&self) -> u64 {
         self.iat
     }
 
+    /// Returns when the token should expire as the number of seconds since the Unix epoch.
     pub fn exp(&self) -> Option<u64> {
         self.exp
     }
