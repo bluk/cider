@@ -6,7 +6,12 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+//! A helper library for Apple services.
+
 #![cfg_attr(not(feature = "std"), no_std)]
+
+#[cfg(feature = "alloc")]
+extern crate alloc;
 
 pub mod device_check;
 pub mod jwt;

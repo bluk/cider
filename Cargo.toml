@@ -22,3 +22,5 @@ serde = { version = "1", features = ["derive"] }
 default = ["std"]
 
 std = []
+
+alloc = []

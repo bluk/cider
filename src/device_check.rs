@@ -12,15 +12,25 @@
 //!
 //! [apple_docs]: https://developer.apple.com/documentation/devicecheck
 
-use crate::time::DurationSinceEpoch;
+#[cfg(all(feature = "alloc", not(feature = "std")))]
+use alloc::string::String;
+#[cfg(feature = "std")]
+use std::string::String;
+
+#[cfg(any(feature = "alloc", feature = "std"))]
 use serde::{Deserialize, Serialize};
 
+#[cfg(any(feature = "alloc", feature = "std"))]
+use crate::time::DurationSinceEpoch;
+
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg(any(feature = "alloc", feature = "std"))]
 pub enum Env {
     Dev,
     Prod,
 }
 
+#[cfg(any(feature = "alloc", feature = "std"))]
 impl Env {
     fn base_endpoint(&self) -> String {
         match self {
@@ -30,17 +40,21 @@ impl Env {
     }
 
     pub fn validate_device_endpoint(&self) -> String {
-        format!("{}/v1/validate_device_token", self.base_endpoint())
+        let mut s = self.base_endpoint();
+        s.push_str("/v1/validate_device_token");
+        s
     }
 }
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[cfg(any(feature = "alloc", feature = "std"))]
 pub struct ValidationReq {
     device_token: String,
     transaction_id: String,
     timestamp: u64,
 }
 
+#[cfg(any(feature = "alloc", feature = "std"))]
 impl ValidationReq {
     pub fn new<T>(device_token: &str, transaction_id: &str, duration_since_epoch: T) -> Self
     where
