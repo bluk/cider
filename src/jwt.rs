@@ -99,16 +99,19 @@ impl<'a> Header<'a> {
 pub struct Claims<'a> {
     iss: &'a str,
     iat: u64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    exp: Option<u64>,
 }
 
 impl<'a> Claims<'a> {
-    pub fn new<T>(team_id: &'a TeamId, duration_since_epoch: T) -> Self
+    pub fn new<T>(team_id: &'a TeamId, duration_since_epoch: T, exp: Option<u64>) -> Self
     where
         T: DurationSinceEpoch,
     {
         Claims {
             iss: team_id.0,
             iat: duration_since_epoch.as_secs(),
+            exp,
         }
     }
 
@@ -118,5 +121,9 @@ impl<'a> Claims<'a> {
 
     pub fn iat(&self) -> u64 {
         self.iat
+    }
+
+    pub fn exp(&self) -> Option<u64> {
+        self.exp
     }
 }
