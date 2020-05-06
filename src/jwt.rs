@@ -100,28 +100,34 @@ impl<'a> Header<'a> {
 /// Contains the issuer ID (team ID), when the token was issued, and when the token expires.
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize)]
 pub struct Claims<'a> {
-    iss: &'a str,
-    iat: u64,
+    pub iss: &'a str,
+    pub iat: u64,
     #[serde(skip_serializing_if = "Option::is_none")]
-    exp: Option<u64>,
+    pub exp: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aud: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sub: Option<&'a str>,
 }
 
 impl<'a> Claims<'a> {
     /// Constructs a `Claims`.
-    pub fn new<T>(team_id: &'a TeamId, duration_since_epoch: T, exp: Option<u64>) -> Self
+    pub fn new<T>(team_id: &'a TeamId, duration_since_epoch: T) -> Self
     where
         T: DurationSinceEpoch,
     {
         Claims {
             iss: team_id.0,
             iat: duration_since_epoch.as_secs(),
-            exp,
+            exp: None,
+            aud: None,
+            sub: None,
         }
     }
 
     /// Returns the issuer of the token (usually the team ID).
     pub fn iss(&self) -> &str {
-        &self.iss
+        self.iss
     }
 
     /// Returns when the token was issued as the number of seconds since the Unix epoch.
@@ -132,5 +138,15 @@ impl<'a> Claims<'a> {
     /// Returns when the token should expire as the number of seconds since the Unix epoch.
     pub fn exp(&self) -> Option<u64> {
         self.exp
+    }
+
+    /// Returns the intended audience.
+    pub fn aud(&self) -> Option<&str> {
+        self.aud
+    }
+
+    /// Returns the subject.
+    pub fn sub(&self) -> Option<&str> {
+        self.sub
     }
 }
