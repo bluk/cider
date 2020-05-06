@@ -23,12 +23,14 @@ use serde::Serialize;
 #[non_exhaustive]
 pub enum Algorithm {
     ES256,
+    RS256,
 }
 
 impl Algorithm {
     fn as_str(&self) -> &str {
         match self {
             Algorithm::ES256 => "ES256",
+            Algorithm::RS256 => "RS256",
         }
     }
 }
