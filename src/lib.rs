@@ -15,6 +15,7 @@ extern crate alloc;
 
 pub mod device_check;
 pub mod jwt;
+pub mod siwa;
 pub mod time;
 
 /// The 10 character team ID.
