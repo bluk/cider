@@ -32,14 +32,14 @@ pub enum Env {
 
 #[cfg(any(feature = "alloc", feature = "std"))]
 impl Env {
-    fn base_endpoint(&self) -> String {
+    fn base_endpoint(self) -> String {
         match self {
             Env::Dev => String::from("https://api.development.devicecheck.apple.com"),
             Env::Prod => String::from(" https://api.devicecheck.apple.com"),
         }
     }
 
-    pub fn validate_device_endpoint(&self) -> String {
+    pub fn validate_device_endpoint(self) -> String {
         let mut s = self.base_endpoint();
         s.push_str("/v1/validate_device_token");
         s
