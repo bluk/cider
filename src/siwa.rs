@@ -17,30 +17,8 @@ use alloc::string::String;
 #[cfg(feature = "std")]
 use std::string::String;
 
-#[cfg(all(feature = "alloc", not(feature = "std")))]
-use alloc::vec::Vec;
-#[cfg(feature = "std")]
-use std::vec::Vec;
-
 #[cfg(any(feature = "alloc", feature = "std"))]
 use serde::{Deserialize, Serialize};
-
-#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
-#[cfg(any(feature = "alloc", feature = "std"))]
-pub struct JWKSet {
-    pub keys: Vec<JWK>,
-}
-
-#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
-#[cfg(any(feature = "alloc", feature = "std"))]
-pub struct JWK {
-    pub kty: String,
-    pub kid: String,
-    pub r#use: String,
-    pub alg: String,
-    pub e: String,
-    pub n: String,
-}
 
 /// The response from the authorization redirect.
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
