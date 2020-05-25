@@ -21,6 +21,11 @@ use alloc::string::String;
 use std::string::String;
 
 #[cfg(all(feature = "alloc", not(feature = "std")))]
+use alloc::str::FromStr;
+#[cfg(feature = "std")]
+use std::str::FromStr;
+
+#[cfg(all(feature = "alloc", not(feature = "std")))]
 use alloc::vec::Vec;
 #[cfg(feature = "std")]
 use std::vec::Vec;
@@ -45,6 +50,24 @@ impl Algorithm {
         match self {
             Algorithm::Es256 => "ES256",
             Algorithm::Rs256 => "RS256",
+        }
+    }
+}
+
+/// Errors for when parsing a str into an algorithm.
+#[non_exhaustive]
+pub enum ParseAlgorithmError {
+    UnknownAlgorithm,
+}
+
+impl FromStr for Algorithm {
+    type Err = ParseAlgorithmError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ES256" => Ok(Algorithm::Es256),
+            "RS256" => Ok(Algorithm::Rs256),
+            _ => Err(ParseAlgorithmError::UnknownAlgorithm),
         }
     }
 }
