@@ -114,7 +114,7 @@ impl<'a> Key<'a> {
 }
 
 /// Contains the algorithm and the key ID used to sign the JWT.
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Header<'a> {
     alg: &'a str,
     kid: &'a str,
@@ -141,7 +141,7 @@ impl<'a> Header<'a> {
 }
 
 /// Contains the issuer ID (team ID), when the token was issued, and when the token expires.
-#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
 pub struct Claims<'a> {
     pub iss: &'a str,
     pub iat: u64,
