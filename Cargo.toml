@@ -16,11 +16,11 @@ include = [
 ]
 
 [dependencies]
-serde = { version = "1", features = ["derive"] }
+serde = { version = "1.0", default-features = false, features = ["derive"] }
 
 [features]
 default = ["std"]
 
-std = []
+std = ["serde/std"]
 
-alloc = []
+alloc = ["serde/alloc"]
