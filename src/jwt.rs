@@ -21,14 +21,11 @@ use alloc::string::String;
 use std::string::String;
 
 #[cfg(all(feature = "alloc", not(feature = "std")))]
-use alloc::str::FromStr;
-#[cfg(feature = "std")]
-use std::str::FromStr;
-
-#[cfg(all(feature = "alloc", not(feature = "std")))]
 use alloc::vec::Vec;
 #[cfg(feature = "std")]
 use std::vec::Vec;
+
+use core::str::FromStr;
 
 use crate::{time::DurationSinceEpoch, TeamId};
 use serde::{Deserialize, Serialize};
@@ -77,6 +74,7 @@ impl FromStr for Algorithm {
 #[non_exhaustive]
 pub enum KeyData<'a> {
     Pkcs8(&'a [u8]),
+    #[cfg(any(feature = "alloc", feature = "std"))]
     Jwk(&'a Jwk),
 }
 
