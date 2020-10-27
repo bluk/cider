@@ -17,20 +17,15 @@ use alloc::string::String;
 #[cfg(feature = "std")]
 use std::string::String;
 
-#[cfg(any(feature = "alloc", feature = "std"))]
+use crate::time::DurationSinceEpoch;
 use serde::{Deserialize, Serialize};
 
-#[cfg(any(feature = "alloc", feature = "std"))]
-use crate::time::DurationSinceEpoch;
-
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-#[cfg(any(feature = "alloc", feature = "std"))]
 pub enum Env {
     Dev,
     Prod,
 }
 
-#[cfg(any(feature = "alloc", feature = "std"))]
 impl Env {
     fn base_endpoint(self) -> String {
         match self {
@@ -47,21 +42,17 @@ impl Env {
 }
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
-#[cfg(any(feature = "alloc", feature = "std"))]
 pub struct ValidationReq {
     device_token: String,
     transaction_id: String,
     timestamp: u64,
 }
 
-#[cfg(any(feature = "alloc", feature = "std"))]
 impl ValidationReq {
     pub fn new<T>(device_token: &str, transaction_id: &str, duration_since_epoch: T) -> Self
     where
         T: DurationSinceEpoch,
     {
-        // let timestamp =
-        //     duration_since_epoch.as_secs() * 1000 + u64::from(duration_since_epoch.subsec_millis());
         ValidationReq {
             device_token: String::from(device_token),
             transaction_id: String::from(transaction_id),

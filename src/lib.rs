@@ -13,8 +13,10 @@
 #[cfg(feature = "alloc")]
 extern crate alloc;
 
+#[cfg(any(feature = "alloc", feature = "std"))]
 pub mod device_check;
 pub mod jwt;
+#[cfg(any(feature = "alloc", feature = "std"))]
 pub mod siwa;
 pub mod time;
 

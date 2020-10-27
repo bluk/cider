@@ -17,12 +17,10 @@ use alloc::string::String;
 #[cfg(feature = "std")]
 use std::string::String;
 
-#[cfg(any(feature = "alloc", feature = "std"))]
 use serde::{Deserialize, Serialize};
 
 /// The response from the authorization redirect.
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
-#[cfg(any(feature = "alloc", feature = "std"))]
 pub struct AuthResponse {
     pub code: Option<String>,
     pub id_token: Option<String>,
@@ -32,14 +30,12 @@ pub struct AuthResponse {
 }
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
-#[cfg(any(feature = "alloc", feature = "std"))]
 pub struct User {
     pub email: Option<String>,
     pub name: Option<Name>,
 }
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
-#[cfg(any(feature = "alloc", feature = "std"))]
 pub struct Name {
     #[serde(rename = "firstName")]
     pub first_name: Option<String>,
@@ -49,7 +45,6 @@ pub struct Name {
 
 /// The id_token value's JWT claims.
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
-#[cfg(any(feature = "alloc", feature = "std"))]
 pub struct IdTokenClaims {
     pub iss: Option<String>,
     pub aud: Option<String>,
@@ -64,7 +59,6 @@ pub struct IdTokenClaims {
 }
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
-#[cfg(any(feature = "alloc", feature = "std"))]
 pub struct ValidateAuthCodeRequest {
     pub client_id: String,
     pub client_secret: String,
@@ -74,7 +68,6 @@ pub struct ValidateAuthCodeRequest {
 }
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
-#[cfg(any(feature = "alloc", feature = "std"))]
 pub struct TokenResponse {
     pub access_token: Option<String>,
     pub expires_in: Option<u64>,
