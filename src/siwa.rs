@@ -20,7 +20,7 @@ use std::string::String;
 use serde::{Deserialize, Serialize};
 
 /// The response from the authorization redirect.
-#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AuthResponse {
     pub code: Option<String>,
     pub id_token: Option<String>,
@@ -29,13 +29,13 @@ pub struct AuthResponse {
     pub error: Option<String>,
 }
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct User {
     pub email: Option<String>,
     pub name: Option<Name>,
 }
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Name {
     #[serde(rename = "firstName")]
     pub first_name: Option<String>,
@@ -44,7 +44,7 @@ pub struct Name {
 }
 
 /// The id_token value's JWT claims.
-#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct IdTokenClaims {
     pub iss: Option<String>,
     pub aud: Option<String>,
@@ -58,7 +58,7 @@ pub struct IdTokenClaims {
     pub auth_time: Option<u64>,
 }
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ValidateAuthCodeRequest {
     pub client_id: String,
     pub client_secret: String,
@@ -67,7 +67,7 @@ pub struct ValidateAuthCodeRequest {
     pub redirect_uri: String,
 }
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TokenResponse {
     pub access_token: Option<String>,
     pub expires_in: Option<u64>,
