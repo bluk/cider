@@ -13,6 +13,7 @@
 #[cfg(feature = "alloc")]
 extern crate alloc;
 
+pub mod cloudkit;
 pub mod crypto;
 #[cfg(any(feature = "alloc", feature = "std"))]
 pub mod device_check;
